@@ -55,66 +55,22 @@
     </view>
 
     <!-- 信息流 -->
-    <uni-card
-      title="经典书单"
-      extra="查看更多 >"
-      :is-full="true"
-      :is-shadow="false"
-    >
-      <uni-list>
-        <uni-list-item
-          title="豹豹带你选：0-1岁宝宝书单"
-          note="书单的详细描述信息"
-          thumb="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png"
-          thumb-size="lg"
-        ></uni-list-item>
-        <uni-list-item
-          title="豹豹带你选：0-1岁宝宝书单"
-          note="书单的详细描述信息"
-          thumb="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png"
-          thumb-size="lg"
-        ></uni-list-item>
-        <uni-list-item
-          title="豹豹带你选：0-1岁宝宝书单"
-          note="书单的详细描述信息"
-          thumb="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png"
-          thumb-size="lg"
-        ></uni-list-item>
-      </uni-list>
-    </uni-card>
-    <uni-card
-      title="最新上架"
-      extra="查看更多 >"
-      :is-full="true"
-      :is-shadow="false"
-    >
-      <uni-list>
-        <uni-list-item
-          title="豹豹带你选：0-1岁宝宝书单"
-          note="书单的详细描述信息"
-          thumb="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png"
-          thumb-size="lg"
-        ></uni-list-item>
-        <uni-list-item
-          title="豹豹带你选：0-1岁宝宝书单"
-          note="书单的详细描述信息"
-          thumb="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png"
-          thumb-size="lg"
-        ></uni-list-item>
-        <uni-list-item
-          title="豹豹带你选：0-1岁宝宝书单"
-          note="书单的详细描述信息"
-          thumb="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png"
-          thumb-size="lg"
-        ></uni-list-item>
-      </uni-list>
-    </uni-card>
-    <uni-group title="基本模式" margin-top="20">
-      <view> 分组内容 </view>
-      <view> 分组内容 </view>
-      <view> 分组内容 </view>
-      <view> 分组内容 </view>
-    </uni-group>
+    <view class="stream">
+      <view class="stream-title">
+        <u-section
+          title="经典书单"
+          sub-title="查看更多"
+          line-color="#fdd25d"
+          font-size="36"
+        >
+        </u-section>
+      </view>
+      <book-item
+        imgSrc="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png"
+        title="豹豹带你选：0-1岁宝宝书单"
+        info="这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息"
+      ></book-item>
+    </view>
   </view>
 </template>
 
@@ -124,25 +80,66 @@ export default {
     return {
       showNotice: true,
       bannerList: [
-        { name: "轮播图1", path: "" },
-        { name: "轮播图2", path: "" },
-        { name: "轮播图3", path: "" }
+        {
+          name: "轮播图1",
+          path: ""
+        },
+        {
+          name: "轮播图2",
+          path: ""
+        },
+        {
+          name: "轮播图3",
+          path: ""
+        }
       ],
       gridList: [
         {
           rows: [
-            { name: "功能1", img: "图片", path: "" },
-            { name: "功能2", img: "图片", path: "" },
-            { name: "功能3", img: "图片", path: "" },
-            { name: "功能4", img: "图片", path: "" }
+            {
+              name: "功能1",
+              img: "图片",
+              path: ""
+            },
+            {
+              name: "功能2",
+              img: "图片",
+              path: ""
+            },
+            {
+              name: "功能3",
+              img: "图片",
+              path: ""
+            },
+            {
+              name: "功能4",
+              img: "图片",
+              path: ""
+            }
           ]
         },
         {
           rows: [
-            { name: "功能5", img: "图片", path: "" },
-            { name: "功能6", img: "图片", path: "" },
-            { name: "功能7", img: "图片", path: "" },
-            { name: "功能8", img: "图片", path: "" }
+            {
+              name: "功能5",
+              img: "图片",
+              path: ""
+            },
+            {
+              name: "功能6",
+              img: "图片",
+              path: ""
+            },
+            {
+              name: "功能7",
+              img: "图片",
+              path: ""
+            },
+            {
+              name: "功能8",
+              img: "图片",
+              path: ""
+            }
           ]
         }
       ]
@@ -202,6 +199,7 @@ swiper-item {
 /* #ifdef MP-ALIPAY || MP-WEIXIN */
 /deep/ .uni-row {
 }
+
 /* #endif */
 
 .grid-item {
@@ -214,5 +212,15 @@ swiper-item {
 .grid-item-image {
   width: 120upx;
   height: 120upx;
+}
+
+.stream {
+}
+
+.stream-title {
+  margin: 20upx 0;
+}
+
+.stream-list {
 }
 </style>
