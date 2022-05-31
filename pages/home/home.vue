@@ -11,7 +11,7 @@
       @getmore="getNotice"
     ></uni-notice-bar>
     <uni-popup ref="popup" class="popup" type="bottom" background-color="#fff">
-      <view class="popup-content center">查看更多内容后关闭公告栏</view>
+      <view class="popup-content all-in-center">查看更多内容后关闭公告栏</view>
     </uni-popup>
     <!-- 轮播图 -->
     <swiper
@@ -23,7 +23,10 @@
       indicator-active-color="#fdd25d"
     >
       <swiper-item v-for="(item, index) in bannerList" :key="index">
-        <view class="swiper-item center" style="background-color: lightblue">
+        <view
+          class="swiper-item all-in-center"
+          style="background-color: lightblue"
+        >
           {{ item.name }}
         </view>
       </swiper-item>
@@ -41,7 +44,7 @@
           v-for="row in col.rows"
           :key="row.name"
         >
-          <view class="grid-item center">
+          <view class="grid-item all-in-center">
             <uni-icons
               class="grid-item-image"
               type="color"
@@ -55,10 +58,14 @@
     </view>
 
     <!-- 信息流 -->
-    <view class="stream">
+    <view
+      class="stream"
+      v-for="streamItem in streamList"
+      :key="streamItem.title"
+    >
       <view class="stream-title">
         <u-section
-          title="经典书单"
+          :title="streamItem.title"
           sub-title="查看更多"
           line-color="#fdd25d"
           font-size="36"
@@ -66,11 +73,37 @@
         </u-section>
       </view>
       <book-item
-        imgSrc="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png"
-        title="豹豹带你选：0-1岁宝宝书单"
-        info="这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息"
-      ></book-item>
+        v-for="listItem in streamItem.items"
+        :key="listItem.title"
+        :imgSrc="listItem.imgSrc"
+        :title="listItem.title"
+        :info="listItem.info"
+        :haveTags="streamItem.haveTags"
+      >
+      </book-item>
     </view>
+    <!-- 绘本信息流 热门推荐 -->
+    <view class="stream books-stream">
+      <view class="stream-title">
+        <u-section
+          title="热门推荐"
+          sub-title="查看更多"
+          line-color="#fdd25d"
+          font-size="36"
+        >
+        </u-section>
+      </view>
+      <book-item-simple
+        class="books"
+        v-for="book in bookList.books"
+        :key="book.title"
+        :imgSrc="book.imgSrc"
+        :title="book.title"
+        :haveTags="bookList.haveTags"
+      >
+      </book-item-simple>
+    </view>
+    <u-loadmore :status="reachBottomStatus" />
   </view>
 </template>
 
@@ -79,89 +112,223 @@ export default {
   data() {
     return {
       showNotice: true,
-      bannerList: [
-        {
-          name: "轮播图1",
-          path: ""
-        },
-        {
-          name: "轮播图2",
-          path: ""
-        },
-        {
-          name: "轮播图3",
-          path: ""
-        }
-      ],
-      gridList: [
-        {
-          rows: [
-            {
-              name: "功能1",
-              img: "图片",
-              path: ""
-            },
-            {
-              name: "功能2",
-              img: "图片",
-              path: ""
-            },
-            {
-              name: "功能3",
-              img: "图片",
-              path: ""
-            },
-            {
-              name: "功能4",
-              img: "图片",
-              path: ""
-            }
-          ]
-        },
-        {
-          rows: [
-            {
-              name: "功能5",
-              img: "图片",
-              path: ""
-            },
-            {
-              name: "功能6",
-              img: "图片",
-              path: ""
-            },
-            {
-              name: "功能7",
-              img: "图片",
-              path: ""
-            },
-            {
-              name: "功能8",
-              img: "图片",
-              path: ""
-            }
-          ]
-        }
-      ]
+      reachBottomStatus: "loadmore",
+      pullDownRefreshStatus: false,
+      bannerList: [],
+      gridList: [],
+      streamList: [],
+      bookList: {}
     };
   },
   methods: {
     getNotice() {
       this.$refs.popup.open();
       this.showNotice = false;
+    },
+    getBooksList() {
+      //TODO:记得节流
+      var newBooks = [];
+      for (
+        let index = this.bookList.books.length;
+        index < 15 + this.bookList.books.length;
+        index++
+      ) {
+        newBooks.push({
+          imgSrc:
+            "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png",
+          title: "绘本" + (index + 1),
+          info: "这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息"
+        });
+      }
+      console.log(newBooks);
+      setTimeout(() => {
+        this.bookList.books.push(...newBooks);
+        this.reachBottomStatus = "loadmore";
+      }, Math.random() * 1500);
+    },
+    getBannerList() {
+      this.bannerList.push(
+        ...[
+          {
+            name: "轮播图1",
+            path: ""
+          },
+          {
+            name: "轮播图2",
+            path: ""
+          },
+          {
+            name: "轮播图3",
+            path: ""
+          }
+        ]
+      );
+    },
+    getGridList() {
+      this.gridList.push(
+        ...[
+          {
+            rows: [
+              {
+                name: "功能1",
+                img: "图片",
+                path: ""
+              },
+              {
+                name: "功能2",
+                img: "图片",
+                path: ""
+              },
+              {
+                name: "功能3",
+                img: "图片",
+                path: ""
+              },
+              {
+                name: "功能4",
+                img: "图片",
+                path: ""
+              }
+            ]
+          },
+          {
+            rows: [
+              {
+                name: "功能5",
+                img: "图片",
+                path: ""
+              },
+              {
+                name: "功能6",
+                img: "图片",
+                path: ""
+              },
+              {
+                name: "功能7",
+                img: "图片",
+                path: ""
+              },
+              {
+                name: "功能8",
+                img: "图片",
+                path: ""
+              }
+            ]
+          }
+        ]
+      );
+    },
+    getStreamList() {
+      this.streamList.push(
+        ...[
+          {
+            title: "经典书单",
+            haveTags: true,
+            items: [
+              {
+                imgSrc:
+                  "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png",
+                title: "豹豹带你选：0-1岁宝宝书单",
+                info: "这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息"
+              },
+              {
+                imgSrc:
+                  "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png",
+                title: "豹豹带你选：1-2岁宝宝书单",
+                info: "这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息"
+              },
+              {
+                imgSrc:
+                  "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png",
+                title: "豹豹带你选：2-3岁宝宝书单",
+                info: "这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息"
+              }
+            ]
+          },
+          {
+            title: "绘本知识",
+            haveTags: false,
+            items: [
+              {
+                imgSrc:
+                  "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png",
+                title: "爱上阅读，从绘本开始",
+                info: "这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息"
+              },
+              {
+                imgSrc:
+                  "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png",
+                title: "绘本之美，美在何处？",
+                info: "这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息"
+              },
+              {
+                imgSrc:
+                  "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png",
+                title: "绘本故事：用图画书养大孩子",
+                info: "这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息"
+              }
+            ]
+          }
+        ]
+      );
+    },
+    getBookList() {
+      this.bookList = {
+        haveTags: false,
+        books: [
+          {
+            imgSrc:
+              "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png",
+            title: "绘本1",
+            info: "这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息"
+          },
+          {
+            imgSrc:
+              "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png",
+            title: "绘本2",
+            info: "这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息"
+          },
+          {
+            imgSrc:
+              "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png",
+            title: "绘本3",
+            info: "这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息"
+          }
+        ]
+      };
+    },
+    refreshPage() {
+      if (this.pullDownRefreshStatus) return;
+      this.pullDownRefreshStatus = true;
+      // this.getNotice();
+      this.bannerList = [];
+      this.getBannerList();
+      this.gridList = [];
+      this.getGridList();
+      this.streamList = [];
+      this.getStreamList();
+      this.bookList = {};
+      this.getBookList();
+      this.pullDownRefreshStatus = false;
     }
+  },
+  // 上拉触底事件
+  onReachBottom() {
+    this.reachBottomStatus = "loading";
+    console.log("上拉触底事件触发");
+    this.getBooksList();
+  },
+  onPullDownRefresh() {
+    this.refreshPage();
+    uni.stopPullDownRefresh();
+  },
+  onLoad(options) {
+    this.refreshPage();
   }
 };
 </script>
 
 <style lang="scss" scoped>
-// 垂直水平居中
-.center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .popup,
 .popup view {
   height: 150upx;
@@ -214,13 +381,18 @@ swiper-item {
   height: 120upx;
 }
 
-.stream {
-}
-
 .stream-title {
+  width: 100%;
   margin: 20upx 0;
 }
 
-.stream-list {
+.books-stream {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.books {
+  display: inline-block;
+  margin: 20upx 20upx;
 }
 </style>

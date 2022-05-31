@@ -7,36 +7,18 @@
     <view class="book-info">
       <text class="title">{{ title }}</text>
       <text class="info">{{ info }}</text>
-      <slot>
+      <view v-if="haveTags" class="tags">
         <u-tag text="馆长推荐" type="success" />
-        <u-tag text="本书单包括59本书" type="warning"
-      /></slot>
+        <u-tag text="本书单包括59本书" type="warning" />
+      </view>
     </view>
   </view>
-
-  <!-- <uni-card
-    title="基础卡片"
-    :isFull="true"
-    :isShadow="false"
-    sub-title="副标题"
-    extra="额外信息"
-  >
-    <text>这是一个通栏卡片 ，通栏没有外边距，左右会贴合父元素。</text>
-  </uni-card>
-  <uni-list class="stream-list">
-    <uni-list-item
-      title="豹豹带你选：0-1岁宝宝书单"
-      note="书单的详细描述信息"
-      thumb="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png"
-      thumb-size="lg"
-    ></uni-list-item>
-  </uni-list> -->
 </template>
 
 <script>
 export default {
   name: "book-item",
-  props: ["imgSrc", "title", "info"],
+  props: ["imgSrc", "title", "info", "tags", "haveTags"],
   data() {
     return {};
   }
@@ -56,6 +38,7 @@ export default {
 .book-image {
   height: 100%;
   margin-right: 20upx;
+
   .testImg {
     float: right;
     height: 176upx;
@@ -71,18 +54,26 @@ export default {
   justify-content: space-between;
 
   .title {
+    flex: 1;
     display: inline-block;
-    height: 1rem;
     font-size: 30rpx;
     font-weight: bold;
+    display: flex;
+    align-items: center;
   }
 
   .info {
+    flex: 1.5;
     display: inline-block;
-    height: 2rem;
     color: #cecece;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .tags {
+    flex: 1;
+    display: flex;
+    justify-content: space-evenly;
   }
 }
 </style>
