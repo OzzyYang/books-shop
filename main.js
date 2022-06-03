@@ -1,7 +1,7 @@
 import App from './App'
 
 // 引入uView UI
-import uView from "uview-ui";
+import uView from 'uview-ui';
 Vue.use(uView);
 
 // #ifndef VUE3

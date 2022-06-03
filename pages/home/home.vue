@@ -324,6 +324,7 @@ export default {
   },
   onLoad(options) {
     this.refreshPage();
+	console.log(this.$u.config.v);
   }
 };
 </script>
