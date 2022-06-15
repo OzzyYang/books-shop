@@ -1,8 +1,13 @@
 <template>
   <view class="book-item-simple">
     <view class="all-in-center book-image">
-      <!-- <image class="book-image" :src="imgSrc" mode="aspectFit" /> -->
-      <view class="all-in-center testImg">我是图片</view>
+      <image
+        v-if="imgSrc"
+        class="all-in-center testImg"
+        :src="imgSrc"
+        mode="aspectFit"
+      />
+      <view v-else class="all-in-center testImg">我是图片</view>
     </view>
     <view class="book-info">
       <text class="all-in-center title">{{ title }}</text>

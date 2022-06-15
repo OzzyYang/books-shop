@@ -96,8 +96,8 @@
       <book-item-simple
         class="books"
         v-for="book in bookList.books"
-        :key="book.title"
-        :imgSrc="book.imgSrc"
+        :key="book.id"
+        :imgSrc="book.cover"
         :title="book.title"
         :haveTags="bookList.haveTags"
       >
@@ -125,26 +125,15 @@ export default {
       this.$refs.popup.open();
       this.showNotice = false;
     },
-    getBooksList() {
+    getBookList() {
+      uni.$http.get("/book/getAll").then(({ data: res }) => {
+        if (res.status === 1) {
+          this.bookList.books = res.data;
+        } else {
+          throw new Error(res.message);
+        }
+      });
       //TODO:记得节流
-      var newBooks = [];
-      for (
-        let index = this.bookList.books.length;
-        index < 15 + this.bookList.books.length;
-        index++
-      ) {
-        newBooks.push({
-          imgSrc:
-            "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png",
-          title: "绘本" + (index + 1),
-          info: "这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息"
-        });
-      }
-      console.log(newBooks);
-      setTimeout(() => {
-        this.bookList.books.push(...newBooks);
-        this.reachBottomStatus = "loadmore";
-      }, Math.random() * 1500);
     },
     getBannerList() {
       this.bannerList.push(
@@ -272,30 +261,24 @@ export default {
         ]
       );
     },
-    getBookList() {
-      this.bookList = {
-        haveTags: false,
-        books: [
-          {
-            imgSrc:
-              "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png",
-            title: "绘本1",
-            info: "这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息"
-          },
-          {
-            imgSrc:
-              "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png",
-            title: "绘本2",
-            info: "这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息"
-          },
-          {
-            imgSrc:
-              "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png",
-            title: "绘本3",
-            info: "这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息"
-          }
-        ]
-      };
+    getDemoBook() {
+      var newBooks = [];
+      for (
+        let index = this.bookList.books.length;
+        index < 15 + this.bookList.books.length;
+        index++
+      ) {
+        newBooks.push({
+          imgSrc:
+            "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png",
+          title: "演示绘本" + (index + 1),
+          info: "这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息这是描述信息"
+        });
+      }
+      setTimeout(() => {
+        this.bookList.books.push(...newBooks);
+        this.reachBottomStatus = "loadmore";
+      }, Math.random() * 1500);
     },
     refreshPage() {
       if (this.pullDownRefreshStatus) return;
@@ -308,6 +291,7 @@ export default {
       this.streamList = [];
       this.getStreamList();
       this.bookList = {};
+      this.bookList.haveTags = false;
       this.getBookList();
       this.pullDownRefreshStatus = false;
     }
@@ -315,8 +299,7 @@ export default {
   // 上拉触底事件
   onReachBottom() {
     this.reachBottomStatus = "loading";
-    console.log("上拉触底事件触发");
-    this.getBooksList();
+    this.getDemoBook();
   },
   onPullDownRefresh() {
     this.refreshPage();
@@ -324,7 +307,6 @@ export default {
   },
   onLoad(options) {
     this.refreshPage();
-	console.log(this.$u.config.v);
   }
 };
 </script>
