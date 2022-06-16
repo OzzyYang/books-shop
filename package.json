@@ -9,6 +9,7 @@
   "author": "Ozzy Yang",
   "license": "ISC",
   "dependencies": {
+    "dayjs": "^1.11.3",
     "luch-request": "^3.0.7",
     "uview-ui": "^1.8.4"
   }

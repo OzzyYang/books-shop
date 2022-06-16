@@ -11,6 +11,11 @@ import Request from "luch-request";
 import uView from "uview-ui";
 Vue.use(uView);
 
+/* 引入日期格式化函数 */
+import dayjs from "dayjs";
+uni.$formateDate = dayjs;
+console.log();
+
 /* 配置http请求 */
 uni.$http = new Request();
 //全局配置
